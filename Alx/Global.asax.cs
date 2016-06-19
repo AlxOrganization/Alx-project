@@ -28,4 +28,5 @@ namespace Alx
             AuthConfig.RegisterAuth();
         }
     }
+    //I added something here
 }
