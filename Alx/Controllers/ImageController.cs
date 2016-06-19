@@ -11,7 +11,7 @@ namespace Alx.Controllers
         //
         // GET: /Image/
 
-        public ActionResult Index() 
+        public ActionResult Index()  
         {
             return View();
         }
