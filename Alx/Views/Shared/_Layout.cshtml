@@ -1,0 +1,654 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="~/Content/sb-admin.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        #MainCategory {
+            font-size:larger;
+            line-height:40px;
+            color:whitesmoke;
+            font-family:'Comic Sans MS';
+        }
+        span.CategoryClass{
+            color:white;
+            text-shadow:0px 0px 1px #f6f6f6;
+            line-height:40px;
+            font-style: oblique;
+            padding-left: 8px;
+            height:40px;
+            font-family:'Times New Roman', Times, serif;
+            font-size:large;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '673880506068611',
+            xfbml: true,
+            version: 'v2.2'
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand" id="inputCategori" 
+                     data-toggle="modal" data-target="#myModalCategorieCreate"></div>
+                <a class="navbar-brand" href="@Url.Action("Index","Home")">Alx</a>
+            </div>            
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <!-- Search Bar -->
+                <li class="dropdown">
+                    @*<form class="navbar-form navbar-left" role="Search" action="Announcement/Search"  method="post">*@
+                    @using (Html.BeginForm("Search", "Announcement", FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+                    { 
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search" style="width:240px;" name="InputSearch">
+                            <input type="text" class="form-control" data-toggle="modal" data-target="#myModalTara" name="InputCounty"
+                                   placeholder="Toata tara" id="inputToataTara"
+                                   style="cursor:default; background-color:white;" readonly>
+                            <input type="text" style="position:absolute; left:-1000px;" name="MainCategory" id="MainCategory1" />
+                            <input type="text" style="position:absolute; left:-10001px;" name="OrderByPreference" id="OrderByPreference">
+                        </div>
+                        <button type="submit" class="btn btn-default" id="SearchButton">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
+                        <br />
+                        <div class="navbar-collapse navbar-static-top">
+                            <ul class="nav navbar-right top-nav fa-align-center">
+                                <li class="dropdown">
+                                    
+                                    <span id="MainCategory" name="MainCategory1">
+
+                                    </span>
+
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    @*</form>*@
+                </li>
+                
+                <!--UserProfil-->
+                <li class="dropdown">                    
+                    @Html.Partial("_LoginPartial")
+                </li>
+            </ul>
+            
+                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                <div class="navbar-collapse">                    
+                    <ul class="nav navbar-nav side-nav" style="left:initial; height:100%;">
+                        <li style="text-align:center; width:100%; padding-left:8px;">
+                            <br />
+                            <a href="@Url.Action("Create","Announcement")" class="btn btn-default btn-lg" style="background-color:#373535; width:90%;">
+                                <span class="CategoryClass" style="line-height:22px;">
+                                    Adauga Anunt
+                                </span>
+                            </a>
+                        </li>
+                        <li>                                                   
+                            <br />
+                            <br />
+                            <span data-idcategory="1" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Auto si ambarcatiuni
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="2" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Imobiliare
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="3" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Electrocasnice
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="4" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Moda si frumusete
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="5" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Casa si gradina
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="6" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Mama si copilul
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="7" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Sport, arta
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="8" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Animale de companie
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="9" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Agro si industrie
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="10" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Servicii, afaceri
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                            <br />
+                        </li>
+                        <li>
+                            <span data-idcategory="11" class="CategoryClass"
+                                  data-toggle="modal" data-target="#myModalCategorieCreate">
+                                Locuri de munca
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    @*End modificare 19.03.2015*@
+                </div>
+                <!-- /.navbar-collapse -->
+</nav>
+        <!--Body-->
+        <script src="~/Scripts/jquery.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1></h1>
+                        <div id="BrId">
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        @*Modificat 10.03.2015*@
+                        @*<h1 class="page-header" style="text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman';">
+                            @ViewBag.Title
+                        </h1>*@
+                        @if (ViewBag.Title != "")
+                        {
+                            <h1 class="page-header" style="text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman';">
+                                @ViewBag.Title
+                            </h1>
+                        }
+                    </div>
+                </div>
+                <!-- /.row -->
+                <!-- Main jumbotron for a primary marketing message or call to action -->
+                <div class="jumbotron" style="background-color: #e5e5e5;">
+                    
+                    @RenderBody()
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalTara" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                    @*<h4 id="titleJudete" class="modal-title">*@
+                        <div class="row" id="titleJudete">
+                            <div class="col-xs-6"><span id="BackCounty">
+                                <i class="glyphicon glyphicon-chevron-left" id="ILog"
+                                   style="display:none;"></i> Judete</span></div>
+                            <div class="col-xs-6" style="text-align:end;"><span id="CountryOrCounty"><i class="glyphicon glyphicon-map-marker"></i> Toata tara</span></div>
+                        </div>
+                    @*</h4>*@
+                </div>
+                <div class="modal-body" id="divJudete">
+                    @{
+                        List<Alx.Models.County> County = new List<Alx.Models.County>();
+                        using (var db = new Alx.Models.EntitiesAlx())
+                        {
+                            var county = db.Counties.ToList<Alx.Models.County>();
+                            County = county;                           
+                        }
+                    }
+
+                    @for (int i = 0 ; i < County.Count ; i+=4)
+                    {
+                        if (i + 4 <= County.Count)
+                        {
+                            if (i + 3 == County.Count)
+                            {
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-3" 
+                                          data-idjudet="@County[i].Id"
+                                          data-nameCounty="@County[i].CountyName">
+                                        @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3"
+                                         data-idjudet="@County[i + 1].Id"
+                                         data-namecounty="@County[i + 1].CountyName">
+                                        @County[i + 1].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3"
+                                         data-idjudet="@County[i + 2].Id"
+                                         data-namecounty="@County[i + 2].CountyName">
+                                        @County[i + 2].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                                if (i + 2 == County.Count)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3"
+                                             data-idjudet="@County[i].Id"
+                                             data-namecounty="@County[i].CountyName">
+                                            @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3"
+                                             data-idjudet="@County[i + 1].Id"
+                                             data-namecounty="@County[i + 1].CountyName">
+                                            @County[i + 1].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                    if (i + 1 == County.Count)
+                                    {
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i].Id"
+                                                 data-namecounty="@County[i].CountyName">
+                                                @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i].Id"
+                                                 data-namecounty="@County[i].CountyName">
+                                                @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i + 1].Id"
+                                                 data-namecounty="@County[i + 1].CountyName">
+                                                @County[i + 1].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i + 2].Id"
+                                                 data-namecounty="@County[i + 2].CountyName">
+                                                @County[i + 2].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i + 3].Id"
+                                                 data-namecounty="@County[i + 3].CountyName">
+                                                @County[i + 3].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    }
+                        }
+                        else
+                        {
+                            if (i + 3 == County.Count)
+                            {
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-3"
+                                         data-idjudet="@County[i].Id"
+                                         data-namecounty="@County[i].CountyName">
+                                        @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3"
+                                         data-idjudet="@County[i + 1].Id"
+                                         data-namecounty="@County[i + 1].CountyName">
+                                        @County[i + 1].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3"
+                                         data-idjudet="@County[i + 2].Id"
+                                         data-namecounty="@County[i + 2].CountyName">
+                                        @County[i + 2].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                                if (i + 2 == County.Count)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3"
+                                             data-idjudet="@County[i].Id"
+                                             data-namecounty="@County[i].CountyName">
+                                            @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-3"
+                                             data-idjudet="@County[i + 1].Id"
+                                             data-namecounty="@County[i + 1].CountyName">
+                                            @County[i + 1].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                    if (i + 1 == County.Count)
+                                    {
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-3"
+                                                 data-idjudet="@County[i].Id"
+                                                 data-namecounty="@County[i].CountyName">
+                                                @County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    }
+                        }
+                    }
+
+
+                </div>
+
+                @foreach (var row in County)
+                {
+                    var db = new Alx.Models.EntitiesAlx();
+                    var city = from m in db.Cities
+                               where m.County.Id == row.Id
+                               select m;
+                    <div class="modal-body"  style="display:none;" data-cityJud="@row.Id">
+                        @foreach (var rowCity in city)
+                        {
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4" 
+                                     data-idcity="@rowCity.Id"
+                                      data-namecity="@rowCity.CityName" 
+                                     data-idcitycounty="@row.Id"
+                                     data-nameCitycounty="@row.CountyName">
+                                    @rowCity.CityName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                </div>                           
+                            </div>
+                        }
+                    </div>
+                }
+
+
+                    </div>
+        </div>
+    
+    </div>
+    @*POP-UP categories*@
+    <div class="modal fade" id="myModalCategorieCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row" id="titleCategori">
+                        <div class="col-xs-4">
+                            <span id="BackCounty">
+                                <i class="glyphicon glyphicon-chevron-left" id="ILog"
+                                   style="display:none;"></i> Categorii
+                            </span>
+                        </div>
+                        <div class="col-xs-8" style="text-align:end;">
+                            <span id="CategoryParent" data-idcategory="0"
+                                  data-category="Nothing">
+                                <i class="glyphicon glyphicon-indent-left"></i>
+                                 Toate Categoriile
+                            </span>
+                        </div>
+                    </div>
+                    @*</h4>*@
+                </div>
+                <div class="modal-body text-center" id="BodyCategory">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    $(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+
+    $(document).ready(function () {
+
+        /*$("#collapseExample").animate({
+            width: 'toggle'
+        }, 0, "swing");
+        $("#page-wrapper").animate({
+            'margin-left': 'auto',
+            'margin-right': 'auto'
+        }, 0, "swing");*/
+
+        $('[data-idjudet]').click(function (event) {
+            //alert('Ai apasat');
+            //alert($(this).data('idjudet'));
+            $('#divJudete').css('display', 'none');
+            $('[data-cityJud="' + $(this).data('idjudet') + '"]').css('display', 'block');
+            $("#CountryOrCounty").text($(this).data('namecounty'));
+            $("#ILog").css("display", "inline");
+        });
+        $('[data-idcity]').click(function () {
+            var Judet = $(this).data('namecitycounty');
+            var Oras = $(this).data('namecity');
+            var Input = Judet;
+            if (Oras != undefined)
+            {
+                Input += (', ' + Oras);
+            }
+            $('#inputToataTara').val(Input);
+            $("#inputToataTara").trigger('click');
+            $('#divJudete').css('display', 'block');
+            $('[data-cityJud]').css('display', 'none');
+            $("#ILog").css("display", "none");
+        });
+
+        $("#BackCounty").click(function () {
+            $('#divJudete').css('display', 'block');
+            $('[data-cityJud]').css('display', 'none');
+            $("#CountryOrCounty").text('Toata tara');
+            $("#ILog").css("display", "none");
+        });
+
+        $("#CountryOrCounty").click(function () {
+            $('#inputToataTara').val($("#CountryOrCounty").text());
+            $("#inputToataTara").trigger('click');
+            $('#divJudete').css('display', 'block');
+            $('[data-cityJud]').css('display', 'none');
+            $("#CountryOrCounty").text('Toata tara');
+            $("#ILog").css("display", "none");
+        });
+        $("#toid").click(function () {
+            $("#collapseExample").animate({
+                width: 'toggle'
+            }, 1000, "swing");
+
+        });
+        var StringCategory = "";
+        //Modificat 19.03.2015
+        //$("#inputCategori").click(function () {    
+        $(".CategoryClass").click(function (event) {
+            var IdCategory = $(this).data('idcategory');
+            var TextCategory = $(this).text();              
+            $.get("/Categorie/Details/" + IdCategory, function (data) {
+                var divBody = document.getElementById('BodyCategory');
+                divBody.innerHTML = "";
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var divRow = document.createElement('div');
+                        divRow.className = "row";
+                        divRow.style.width = "100%";
+                        //<div class="col-xs-6 col-sm-3"
+                        var divCell = document.createElement('div');
+                        divCell.className = "col-xs-12";
+                        //County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        divCell.innerHTML = data[i].Name;
+                        var attr = document.createAttribute('data-category');
+                        attr.value = data[i].Name;
+                        divCell.setAttributeNode(attr);
+                        //Adaugat 19.03.2015
+                        var attr1 = document.createAttribute('data-idcategory');
+                        attr1.value = data[i].Id;
+                        divCell.setAttributeNode(attr1);
+                        //End Adaugare 19.03.2015
+                        if (data[i].Count > 0) {
+                            var span = document.createElement('span');
+                            span.className = "glyphicon glyphicon-chevron-right";
+                            divCell.insertBefore(span, divCell.childNodes[1]);
+                        }
+                        divRow.appendChild(divCell);
+                        divBody.insertBefore(divRow, divBody.childNodes[divBody.childNodes.length]);
+
+
+                    }                    
+                    $("#CategoryParent").text(TextCategory);
+                    $("#CategoryParent").data('idcategory', IdCategory);
+                    $('#CategoryParent').data('category', TextCategory);
+                    $('[data-category]').click(function () {
+                        GetElementsCategory(this);
+                    });
+                }
+                else {
+                    $('#MainCategory').text(TextCategory);
+                    $("#MainCategory1").val(IdCategory);
+                    $("#inputCategori").trigger('click');
+                }
+            });
+
+            return;
+        });
+        $("#CategoryParent").click(function () {
+            
+            alert($(this).data('idcategory'));
+            alert($(this).data('category'));
+            $('#MainCategory').text($(this).data('category'));
+            $('#MainCategory1').val($(this).data('idcategory'));
+            
+            $("#inputCategori").trigger('click');
+        });
+
+        function GetElementsCategory(element) {
+            var IdCategory = $(element).data('idcategory');
+            $.get("/Categorie/Details/" + IdCategory, function (data) {
+                var divBody = document.getElementById('BodyCategory');
+                divBody.innerHTML = "";
+                while (divBody.firstChild) {
+                    divBody.removeChild(divBody.firstChild);
+                }
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var divRow = document.createElement('div');
+                        divRow.className = "row";
+                        divRow.style.width = "100%";
+                        var divCell = document.createElement('div');
+                        divCell.className = "col-xs-12";
+                        divCell.innerHTML = data[i].Name;
+                        var attr = document.createAttribute('data-category');
+                        attr.value = data[i].Name;
+                        divCell.setAttributeNode(attr);
+                        var attr1 = document.createAttribute('data-idcategory');
+                        attr1.value = data[i].Id;
+                        divCell.setAttributeNode(attr1);
+                        if (data[i].Count > 0) {
+                            var span = document.createElement('span');
+                            span.className = "glyphicon glyphicon-chevron-right";
+                            divCell.insertBefore(span, divCell.childNodes[1]);
+                        }
+                        divRow.appendChild(divCell);
+                        divBody.insertBefore(divRow, divBody.childNodes[divBody.childNodes.length]);
+                    }
+                    $("#CategoryParent").text($(element).data('category'));
+                    $("#CategoryParent").data('idcategory', $(element).data('idcategory'));
+                    $("#CategoryParent").data('category', $(element).data('category'));
+                    $('[data-category]').click(function () {
+                        GetElementsCategory(this);
+                    });
+                }
+                else {
+                    $('#MainCategory').text($(element).data('category'));
+                    $('#MainCategory1').val($(element).data('idcategory'));
+                    $("#inputCategori").trigger('click');
+                }
+
+            });
+        }
+    });
+    </script>
+   @RenderSection("scripts", required: false) 
+</body>
+
+</html>

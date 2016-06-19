@@ -1,0 +1,75 @@
+﻿@model Alx.Models.RegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<hgroup class="title">
+    <h3>@ViewBag.Title.</h3>
+    <br />
+    <h4>Create a new account.</h4>
+</hgroup>
+<div class="row">
+    <div class="col-md-6">
+        <section id="loginForm">
+            @*<h2>Use a local account to log in.</h2>*@
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="row">
+                    <div class="editor-label">
+                        <label>Email</label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><b>&#64;</b></span>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" , placeholder="Email"})
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="editor-label">
+                        <label>Password</label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-lock"></i></span>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="editor-label">
+                        <label>Confirm Password</label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-lock"></i></span>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    &nbsp;
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Register
+                        </button>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+

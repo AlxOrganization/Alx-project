@@ -1,0 +1,161 @@
+﻿@model Dictionary<int, List<Alx.Models.AnnouncementModel>>
+@{
+    ViewBag.Title = "";
+}
+
+<style type="text/css">
+    img.Category{
+        width: 200px;
+        height: 200px;
+    }
+    img.borderHover {
+        box-shadow: 0px 0px 1px 1px #888888;
+    }
+    img.borderHover:hover {
+            box-shadow: 0px 0px 5px 5px #888888;
+            -webkit-box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.55);
+            -moz-box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.55);
+            background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color- stop(47%,#f6f6f6), color-stop(100%,#ededed));
+            background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+            background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+            background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+            background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
+            color: #266CAE;
+        }
+    span#Span{
+        color:black;
+            text-shadow:0px 0px 1px #f6f6f6;
+            line-height:40px;
+            font-style: oblique;
+            padding-left: 8px;
+            height:40px;
+            font-family:'Times New Roman', Times, serif;
+            font-size:large;
+    }
+</style>
+@if (Model[1].Count > 0)
+{
+    <div class="row">
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-8" style="text-align: left;">
+            <span id="Span">Cea mai populara categorie @(Model[1].Count > 0 ? (": " + Model[1][0].Category) : "")</span>
+        </div>
+        <div class="col-md-4" style="text-align: right;">
+            <div class="btn btn-default btn-lg" data-idcategoryindex="@Model[1][0].CategoryId">Vezi mai multe</div>
+        </div>
+    </div>
+    <div class="row">
+        <br />
+    </div>
+    <div class="row">
+        @foreach (var item in Model[1])
+        {
+            <div class="col-lg-3">
+                <a href='@Url.Action("SearchAnnouncement/" + item.Id, "Announcement")'>
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <img src="@item.ImageString[0]" alt="NoImage" class="Category  borderHover" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br />
+                        <div class="col-lg-12">
+                            @item.Title
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-8" style="text-align: left;">
+        <span id="Span">Cele mai populare</span>
+    </div>
+    <div class="col-md-4" style="text-align: right;">
+        <div class="btn btn-default btn-lg" data-vizualizate="POPULARE">Vezi mai multe</div>
+    </div>
+</div>
+<div class="row">
+    <br />
+</div>
+<div class="row">
+    @foreach (var item in Model[3])
+    {
+        <div class="col-lg-3">
+            <a href='@Url.Action("SearchAnnouncement/" + item.Id, "Announcement")'>
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <img src="@item.ImageString[0]" alt="NoImage" class="Category  borderHover" />
+                    </div>
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-lg-12">
+                        @item.Title
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-8" style="text-align: left;">
+        <span id="Span">Cele mai noi</span>
+    </div>
+    <div class="col-md-4" style="text-align: right;">
+        <div class="btn btn-default btn-lg" data-noi="NOI">Vezi mai multe</div>
+    </div>
+</div>
+<div class="row">
+    <br />
+</div>
+<div class="row">
+    @foreach (var item in Model[2])
+    {
+        <div class="col-lg-3">
+            <a href='@Url.Action("SearchAnnouncement/" + item.Id, "Announcement")'>
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <img src="@item.ImageString[0]" alt="NoImage" class="Category  borderHover" />
+                    </div>
+                </div>
+                <div class="row">
+                    <br />
+                    <div class="col-lg-12">
+                        @item.Title
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<hr />
+<script type="text/javascript">
+    $("[data-idCategoryIndex]").click(function () {
+        //alert($(this).data("idCategoryIndex"));
+        //alert($(this).data('idcategoryindex'));        
+        $('#MainCategory1').val($(this).data("idcategoryindex"));
+        $('#SearchButton').click();
+    });
+    $("[data-noi]").click(function () {
+        $('#OrderByPreference').val($(this).data("noi"));
+        $('#SearchButton').click();
+    });
+
+    $("[data-vizualizate]").click(function () {
+        $('#OrderByPreference').val($(this).data("vizualizate"));
+        $('#SearchButton').click();
+    });
+</script>

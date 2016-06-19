@@ -1,0 +1,452 @@
+﻿@model Alx.Models.Announcement
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    #SearchDiv {
+        display: none;
+        position: fixed;
+        z-index: 10002;
+        top: 48%;
+        left: 48%;
+        margin-top: -130px;
+        margin-left: -100px;
+        border-radius: 15px 15px;
+        padding: 20px;
+        background-color: white;
+        border: 2px solid #808080;
+    }
+
+    #BodyContent {
+        display: none;
+        width: 101%;
+        height: 101%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 10001;
+        background-color: rgba(128, 128, 128, 0.24);
+        pointer-events: none;
+    }
+
+    #slider {
+        /*width:720px;
+        height:400px;*/
+        width: 400px;
+        height: 324px;
+        overflow: hidden;
+        box-shadow: 0px 0px 5px 5px #888888;
+        -webkit-box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.55);
+        -moz-box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.55);
+        background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color- stop(47%,#f6f6f6), color-stop(100%,#ededed));
+        background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+        background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+        background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+        background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 );
+        color: #266CAE;
+    }
+
+        #slider .slides {
+            display: block;
+            width: 10000px;
+            /*height:400px;*/
+            height: 324px;
+            margin: 0;
+            padding: 0;
+        }
+
+        #slider .slide {
+            float: left;
+            list-style-type: none;
+            /*width:720px;
+            height:400px;*/
+            width: 400px;
+            height: 324px;
+        }
+</style>
+<div class="row">
+    &nbsp;
+</div>
+<div class="row" id="Galery">
+    <div class="row">
+        <div class="col-md-12">
+            @{
+                List<string> ImagesSrc = new List<string>();
+                if (Model.Images.Count > 0)
+                {
+                    for (int i = 0; i < Model.Images.Count; i++)
+                    {
+                        var ImgSrc = "data:image/jpeg;base64,";
+                        ImgSrc += @System.Convert.ToBase64String(Model.Images.ElementAt(i).PhysicalImage);
+                        ImagesSrc.Add(ImgSrc);
+                    }
+                }
+
+            }
+            @*@if (ImagesSrc.Count > 0)
+                {
+                    <img id="BodyImage" style="width:683px; height:404px;" src="@ImagesSrc[0]" />
+                }*@
+        </div>
+    </div>
+    <div class="row">
+        &nbsp;
+        <br />
+    </div>
+    @*<div class="row" style="text-align:center;">
+            @if(ImagesSrc.Count >0)
+            {
+                for(int i = 0 ; i < ImagesSrc.Count;i++)
+                {
+                    <div class="col-md-1" data-img="IMG" style="width:120px; text-align:center; display:inherit; left:25px;">
+                        <img class="GaleryClass" style="width:100px; height:100px;" src="@ImagesSrc[i]" />
+                    </div>
+                }
+            }
+        </div>*@
+    <div class="row" style="text-align:center;">
+        <div class="col-md-6">
+            @*style="padding-left:60px;"*@
+            <div id="slider">
+                <ul class="slides">
+                    @if (ImagesSrc.Count > 0)
+                    {
+                        for (int i = 0; i < ImagesSrc.Count; i++)
+                        {
+                            <li class="slide">
+                                <img style="width: 400px; height: 324px;" src="@ImagesSrc[i]" />
+                            </li>
+                        }
+                        <li class="slide">
+                            <img style="width: 400px; height: 324px;" src="@ImagesSrc[0]" />
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12" style="text-align:center;">
+                    <span style="text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman'; font-size:210%; text-align:center; font-weight: bold;">
+                        @Model.Title
+                    </span>
+                </div>
+            </div>
+            <hr style="height:2px; color:black;" />
+            <div class="row">
+                @{
+                    string moneda = "Lei";
+                    if (Model.Currency != 0)
+                    {
+                        moneda = "Euro";
+                    }
+                }
+                <div class="col-md-5">
+                    <div class="btn btn-default" style="width:187px;">
+                        @*style="width:100%; background-color: #bbb9b9; padding: 10px; border-radius: 5px 5px; line-height:60px; height:60px; vertical-align:middle;"*@
+                        <span style="font-size:150%; text-align:center; font-weight: bold; line-height:60px; height:60px; vertical-align:middle;">
+                            @Model.Price
+                        </span>
+                        <span style="font-size:150%; text-align:center; font-weight: bold; line-height:60px; height:60px; vertical-align:middle;">
+                            @if (moneda == "Euro")
+                            {
+                                <i class="glyphicon glyphicon-eur"></i>
+                            }
+                            else
+                            {
+                                <i>@moneda</i>
+                            }
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div style="line-height:75px; height:75px;">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding-left:20px; border-left:1px solid #ffffff;">
+                    <div class="btn btn-default" data-toggle="modal" data-target="#PopUpEmail">
+                        @*style="font-size:150%; text-align:center; font-weight: bold; line-height:60px; height:60px; vertical-align:middle;" style="width:90%;  background-color: #bbb9b9; padding: 10px; border-radius: 5px 5px; line-height:60px; height:60px; vertical-align:middle;"*@
+                        <span style="font-size:150%; text-align:center; font-weight: bold; line-height:60px; height:60px; vertical-align:middle;">
+                            <i class="glyphicon glyphicon-envelope"></i>
+                        </span>
+                        <span style="font-size:150%; text-align:center; font-weight: bold; line-height:60px; height:60px; vertical-align:middle;">
+                            Trimite Mesaj
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr style="height:2px; color:black;" />
+            <div class="row">
+                <div class="col-md-12">
+
+                    @using (var db = new Alx.Models.EntitiesAlx())
+                    {
+                        string Category = "";
+                        Int32? catId = null;
+                        if (Model.CategoryId.HasValue)
+                        {
+                            catId = Model.CategoryId.Value;
+                        }
+                        Alx.Models.Category category = (from m in db.Categories
+                                                        where m.Id == catId
+                                                        select m).SingleOrDefault<Alx.Models.Category>();
+                        List<string> StringCategory = new List<string>();
+                        if (category != null)
+                        {
+                            StringCategory.Add(category.Name);
+
+                            if (category.ParentId != 0)
+                            {
+                                while (category != null && category.ParentId > 0)
+                                {
+                                    Alx.Models.Category cc = (from m in db.Categories
+                                                              where m.Id == category.ParentId
+                                                              select m).SingleOrDefault<Alx.Models.Category>();
+                                    if (cc != null)
+                                    {
+                                        StringCategory.Add(cc.Name);
+                                    }
+                                    category = cc;
+                                }
+                            }
+
+                        }
+
+                        StringCategory.Reverse();
+                        for (int ii = 0; ii < StringCategory.Count; ii++)
+                        {
+                            if (ii == 0)
+                            {
+                                Category += StringCategory[ii];
+                            }
+                            else
+                            {
+                                Category += (" > " + StringCategory[ii]);
+                            }
+                        }
+
+                        if (Category != "")
+                        {
+                            <span style="font-size:110%; text-align:center; font-weight: bold;">
+                                @Category
+                            </span>
+                        }
+                        else
+                        {
+                            <span style="font-size:110%; text-align:center; font-weight: bold;">
+                                &nbsp;
+                            </span>
+                        }
+
+                    }
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-4 col-xs-offset-8">
+                    <span style="font-size:110%; text-align:center; font-weight: bold;">
+                        Vizualizari: @Model.Vizualization
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <br />
+    </div>
+    <div class="row">
+
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12">
+                    <span style="float:left; text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman'; font-size:140%;"> Descriere Anunt </span>
+                    <hr style="display:block; height:2px;" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @*<span style="font-size:120%;"> @Model.Description.Replace("\n","<br/>") </span>*@
+                    <span style="font-size:120%;">
+                        @foreach(var strings in Model.Description.Split('\n'))
+                        {
+                            @strings
+                            <br />
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span style="float:left; text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman'; font-size:140%;"> Adresa </span>
+                    <hr style="display:block; height:2px;" />
+                </div>
+            </div>
+            <div class="row">
+                @{
+                    string city = "";
+                    using (var db = new Alx.Models.EntitiesAlx())
+                    {
+                        var adr = (from m in db.Cities
+                                   where m.Id == Model.Address.CityId
+                                   select new { m.CityName, m.County.CountyName }).Single();
+                        if (adr != null)
+                        {
+                            city = adr.CityName.ToString() + ", " + adr.CountyName.ToString();
+                        }
+
+                    }
+                }
+                <div class="col-md-12">
+                    <span style="font-size:120%;"> @Model.Address.AddressName </span>
+                    <span style="font-size:120%;"><b><i> @city </i></b></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            &nbsp;
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="PopUpEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="closeButtonTop" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Trimite Mesaj</h4>
+            </div>
+            @using (Ajax.BeginForm("SendEmail", "Announcement",
+                new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnBegin = "OnBeginAjaxSendEmail",
+                    OnComplete = "OnCompleteAjaxSendEmail"
+                }))
+            {
+                <div class="modal-body">
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">From</label>
+                                </div>
+                                <div class="col-lg-10">
+                                    <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="FromEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    }
+                    <input value="@Model.Id" id="sth" name="IdAnnouncement" type="hidden" />
+                    <input value="@Model.UserId" id="sth" name="UserId" type="hidden" />
+                    <input value="@Model.Title" name="TitleAnnouncement" type="hidden" />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Message</label>
+                            </div>
+                            <div class="col-lg-10">
+                                <textarea name="MessageEmail" id="MessageEmail" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <div class="btn btn-default" id="CloseButtonSendEmail" data-dismiss="modal">Close</div>
+                    <input type="submit" class="btn btn-primary" value="Save changes" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="SearchDiv">
+    <img src="~/Images/loading_spinner.gif" />
+</div>
+<div id="BodyContent">
+    &nbsp;
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $('.GaleryClass').hover(function (event)
+    //    {
+    //        //alert($(this).attr('src'));
+    //        $('#BodyImage').attr('src', $(this).attr('src'));
+    //    });
+
+
+    //});
+    $(document).ready(function () {
+        $("#closeButtonTop").click(function () {
+            $("#MessageEmail").val("");
+            $("#MessageEmail").text("");
+        });
+        // CloseButtonSendEmail
+        $("#CloseButtonSendEmail").click(function () {
+            $("#MessageEmail").val("");
+            $("#MessageEmail").text("");
+        });
+    });
+    function OnBeginAjaxSendEmail() {
+        $("#CloseButtonSendEmail").click();
+        $("#SearchDiv").css("display", "block");
+        $("#BodyContent").css("display", "block");
+        $("#BodyContent").css("pointer-events", "all");
+
+
+    }
+    function OnCompleteAjaxSendEmail() {
+        $("#BodyContent").css("display", "none");
+        $("#SearchDiv").css("display", "none");
+        $("#BodyContent").css("pointer-events", "none");
+        $("#MessageEmail").val("");
+        $("#MessageEmail").text("");
+    }
+    $(function () {
+
+        //Configuration
+        var width = 400;
+        var animationSpeed = 1000;
+        var pause = 3000;
+        var curentSlide = 1;
+
+        //Cache DOM
+        var $slider = $('#slider');
+        var $slideContainer = $slider.find('.slides');
+        var $slides = $slideContainer.find('.slide');
+
+        var interval;
+
+        function startSlider() {
+            interval = setInterval(function () {
+                $slideContainer.animate({ 'margin-left': '-=' + width }, animationSpeed, function () {
+                    curentSlide++;
+                    if (curentSlide === $slides.length) {
+                        curentSlide = 1;
+                        $slideContainer.css('margin-left', 0);
+                    }
+                });
+            }, pause);
+        }
+
+        function stopSlider() {
+            clearInterval(interval);
+        }
+
+        $slider.on('mouseenter', stopSlider).on('mouseleave', startSlider);
+
+        startSlider();
+    });
+</script>

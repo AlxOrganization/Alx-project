@@ -1,0 +1,96 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="~/Content/sb-admin.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+        div.cn {
+            display: table-cell;
+            width: 90px;
+            height: 90px;
+            background: #cfc9c9;
+            vertical-align: middle;
+            text-align: center;
+            border: dashed;
+            border-radius: 5px;
+        }
+
+        div.inner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #808080;
+        }
+        header#HeaderId{
+            line-height:50px;
+            height:50px;
+            left:0px;
+            background-color:#f3f2f2;
+            vertical-align:middle;
+            /*padding-top:13px;*/
+            position:fixed;
+            width:100%;
+            z-index:1000;
+            padding-left:8%;
+            background-color:#222;
+        }
+        body{
+            /*padding-top:20px;*/
+        }
+        div#BodyId {
+            top: 200px;
+        }
+        #WitheDiv {
+            background-color: #ffffff;
+            position:fixed;
+            z-index:1000;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="container" style="padding-bottom:60px;">
+            @*<div class="jumbotron" id="HeaderId">
+                <div>
+                    @Html.ActionLink("ALX","Index","Home")
+                </div>
+            </div>*@
+            <div id="WitheDiv">
+                <header id="HeaderId">
+                    <div>
+                        <a class="navbar-brand" href="@Url.Action("Index","Home")">Alx</a>
+                    </div>
+                    <div style="width:90%; text-align:right;">
+                        <ul class="nav navbar-right top-nav">
+                            <li class="dropdown">
+                                @Html.Partial("_LoginPartial")
+                            </li>
+                        </ul>
+                    </div>
+                </header>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="jumbotron" id="BodyId" style="background-color: #e5e5e5;">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</body>
+</html>

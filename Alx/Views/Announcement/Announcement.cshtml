@@ -1,0 +1,536 @@
+﻿@model List<Alx.Models.Announcement>
+@using PagedList.Mvc;
+@{
+    int PageSize = ViewBag.PageSize;
+    int PageActive = ViewBag.PageActive;
+    int Toate = 0;
+    int Firma = 0;
+    int Privat = 0;
+    string FilterAnnouncements = "TOATE";
+    string Order = "Sorteaza dupa";
+    string Currency = "RON";
+    if (Session["AllAnnouncementNo"] != null)
+    {
+        Toate = (int)Session["AllAnnouncementNo"];
+    }
+    if (Session["FirmaAnnouncementNo"] != null)
+    {
+        Firma = (int)Session["FirmaAnnouncementNo"];
+    }
+    if (Session["PrivatAnnouncementNo"] != null)
+    {
+        Privat = (int)Session["PrivatAnnouncementNo"];
+    }
+    if (Session["ActiveAnnouncements"] != null)
+    {
+        FilterAnnouncements = Session["ActiveAnnouncements"].ToString();
+    }
+    if (Session["OrderBy"] != null)
+    {
+        Order = Session["OrderBy"].ToString();
+    }
+    if (Session["Currency"] != null)
+    {
+        Currency = Session["Currency"].ToString();
+    }
+}
+<style>
+    #SearchDiv {
+        display: none;
+        position: fixed;
+        z-index: 10002;
+        top: 48%;
+        left: 48%;
+        margin-top: -130px;
+        margin-left: -100px;
+        border-radius: 15px 15px;
+        padding: 20px;
+        background-color: white;
+        border: 2px solid #808080;
+    }
+
+    #BodyContent {
+        display: none;
+        width: 101%;
+        height: 101%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 10001;
+        background-color: rgba(128, 128, 128, 0.24);
+        pointer-events: none;
+    }
+</style>
+<script type="text/javascript">
+    function OnBeginAjax() {
+        $("#SearchDiv").css("display", "block");
+        $("#BodyContent").css("display", "block");
+        $("#BodyContent").css("pointer-events", "all");
+
+
+    }
+    function OnCompleteAjax() {
+        $("#BodyContent").css("display", "none");
+        $("#SearchDiv").css("display", "none");
+        $("#BodyContent").css("pointer-events", "none");
+    }
+</script>
+<div id="SearchDiv">
+    <img src="~/Images/loading_spinner.gif" />
+</div>
+<div id="BodyContent">
+    &nbsp;
+</div>
+
+<div id="ReplacePartial">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                @if (FilterAnnouncements == "TOATE")
+                {
+                <li role="presentation" class="active">
+                    @Ajax.ActionLink("Toate (" + Toate + ")",
+                                           "Entrepeneur/1",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                </li>
+                }
+                else
+                {
+                <li role="presentation">
+                    @Ajax.ActionLink("Toate (" + Toate + ")",
+                                           "Entrepeneur/1",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                </li>
+                }
+                @if (FilterAnnouncements == "PRIVAT")
+                {
+                <li role="presentation" class="active">
+                    @Ajax.ActionLink("Privat ("+Privat+")",
+                                             "Entrepeneur/2",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                </li>
+                }
+                else
+                {
+                <li role="presentation">
+                    @Ajax.ActionLink("Privat (" + Privat + ")",
+                                           "Entrepeneur/2",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+
+                </li>
+                }
+                @if (FilterAnnouncements == "FIRMA")
+                {
+                <li role="presentation" class="active">
+                    @Ajax.ActionLink("Firma (" + Firma + ")",
+                                           "Entrepeneur/3",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                </li>
+                }
+                else
+                {
+                <li role="presentation">
+                    @Ajax.ActionLink("Firma (" + Firma + ")",
+                                           "Entrepeneur/3",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12" style="text-align:right;">
+            <div class="btn-group" role="group" aria-label="...">
+                @if (Currency == "RON")
+                {                    
+                    <a data-ajax="true"
+                       class="btn btn-default active"
+                       data-ajax-begin="OnBeginAjax"
+                       data-ajax-complete="OnCompleteAjax"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#ReplacePartial"
+                       href="/Announcement/Currency/0">
+                        RON
+                    </a>
+                    <a data-ajax="true"
+                       class="btn btn-default"
+                       data-ajax-begin="OnBeginAjax"
+                       data-ajax-complete="OnCompleteAjax"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#ReplacePartial"
+                       href="/Announcement/Currency/1">
+                        <i class="glyphicon glyphicon-eur"></i>
+                    </a>
+                }
+                else
+                {                    
+                    <a data-ajax="true"
+                       class="btn btn-default"
+                       data-ajax-begin="OnBeginAjax"
+                       data-ajax-complete="OnCompleteAjax"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#ReplacePartial"
+                       href="/Announcement/Currency/0">
+                        RON
+                    </a>
+                    <a data-ajax="true"
+                       class="btn btn-default active"
+                       data-ajax-begin="OnBeginAjax"
+                       data-ajax-complete="OnCompleteAjax"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#ReplacePartial"
+                       href="/Announcement/Currency/1">
+                        <i class="glyphicon glyphicon-eur"></i>
+                    </a>
+                }
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        @Order
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            @*<a href="#">Noi</a>*@
+                            @Ajax.ActionLink("Noi",
+                                           "OrderBy/1",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                        </li>
+                        <li>
+                            @*<a href="#">Ieftine</a>*@
+                            @Ajax.ActionLink("Ieftine",
+                                           "OrderBy/2",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                        </li>
+                        <li>
+                            @*<a href="#">Scumpe</a>*@
+                            @Ajax.ActionLink("Scumpe",
+                                           "OrderBy/3",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                        </li>
+                        <li>
+                            @*<a href="#">Scumpe</a>*@
+                            @Ajax.ActionLink("Populare",
+                                           "OrderBy/4",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @for (int j = 0; j < Model.Count(); j += 3)
+    {
+        <br />
+        <div class="row">
+
+            @for (int i = j; i < Math.Min((j + 3), (Model.Count)); i++)
+            {
+
+                <div class="col-lg-4" style="text-align:center;">
+                    <a href='@Url.Action("SearchAnnouncement/" + Model[i].Id, "Announcement")'>
+                        <div class="borderHover" style="width:320px; border-radius: 2px; background-color:#ffffff; ">
+                            <div class="row">
+                                <br />
+                                <div>
+                                    @{
+                                        var ImgSrc = "data:image/jpeg;base64,";
+                                        if (Model[i].Images.Count > 0)
+                                        {
+                                            ImgSrc += @System.Convert.ToBase64String(Model[i].Images.First().PhysicalImage);
+                                        }                                        
+                                    }
+                                    <img src="@ImgSrc" alt="Nothing" style="position:inherit; width:302px;height:259px;" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <br />
+                                <span style="text-shadow: 2px 2px #bbbbbb; font-family:'Times New Roman'; font-size:140%;"><b>@Model[i].Title</b></span>
+                            </div>
+                            <div class="row">
+                                <br />
+                                @using (var db = new Alx.Models.EntitiesAlx())
+                                {
+                                    string Category = "";
+                                    Int32? catId = null;
+                                    if (Model[i].CategoryId.HasValue)
+                                    {
+                                        catId = Model[i].CategoryId.Value;
+                                    }
+                                    Alx.Models.Category category = (from m in db.Categories
+                                                                    where m.Id == catId
+                                                                    select m).SingleOrDefault<Alx.Models.Category>();
+                                    List<string> StringCategory = new List<string>();
+                                    if (category != null)
+                                    {
+                                        StringCategory.Add(category.Name);
+
+                                        if (category.ParentId != 0)
+                                        {
+                                            while (category != null && category.ParentId > 0)
+                                            {
+                                                Alx.Models.Category cc = (from m in db.Categories
+                                                                          where m.Id == category.ParentId
+                                                                          select m).SingleOrDefault<Alx.Models.Category>();
+                                                if (cc != null)
+                                                {
+                                                    StringCategory.Add(cc.Name);
+                                                }
+                                                category = cc;
+                                            }
+                                        }
+
+                                    }
+
+                                    StringCategory.Reverse();
+                                    for (int ii = 0; ii < StringCategory.Count; ii++)
+                                    {
+                                        if (ii == 0)
+                                        {
+                                            Category += StringCategory[ii];
+                                        }
+                                        else
+                                        {
+                                            Category += (" > " + StringCategory[ii]);
+                                        }
+                                    }
+
+                                    if (Category != "")
+                                    {
+                                        <div style="width:100%; text-align:center; align-content:center; font-family:'Times New Roman'; font-size:80%;">
+                                            @Category
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div style="width:100%; text-align:center; align-content:center; font-family:'Times New Roman'; font-size:80%;">
+                                            &nbsp;
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-offset-7">
+                                    <div style="width:100%; text-align:right; align-content:center; font-family:'Times New Roman'; font-size:80%;">
+                                        Vizualizari: @Model[i].Vizualization
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align:center; align-content:center; padding-left:4px;">
+                                <hr style="width:98%; background-color:black; height:1px; line-height:1px; margin: 3px 3px;" />
+                            </div>
+                            <div class="row" style="text-align:end; padding-right:30px;">
+                                <div class="col-lg-6" style="text-align:left; padding-left:-19px;">
+                                    @*Vizualizari: @Model[i].Vizualization*@
+                                    &nbsp;
+                                </div>
+                                <div class="col-lg-6">
+                                    @if (Model[i].Price != 0 && Model[i].Price.HasValue)
+                                    {
+                                        if (Currency == "RON")
+                                        {
+                                            <span>@Model[i].Price RON</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@Model[i].Price <i class="glyphicon glyphicon-eur"></i></span>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <span>&nbsp;</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <br />
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            }
+
+        </div>
+    }
+
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="text-align:center;">
+            @if (PageSize > 1)
+            {
+                <nav>
+                    <ul class="pagination">
+                        @if (PageActive == 1)
+                        {
+                            <li class="disabled">
+                                <span aria-hidden="true">
+                                    <<
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+
+                                @Ajax.ActionLink("<<",
+                                              "Paginating/1",
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= PageSize; i++)
+                        {
+
+
+                            if (i == PageActive)
+                            {
+                                <li class="active">
+                                    @Ajax.ActionLink(i.ToString(),
+                                             "Paginating/" + i,
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    @Ajax.ActionLink(i.ToString(),
+                                             "Paginating/" + i,
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                                </li>
+                            }
+                        }
+                        @if (PageActive == PageSize)
+                        {
+                            <li class="disabled">
+                                @*<a href="#" aria-label="Next" disabled>*@
+                                <span aria-hidden="true">>></span>
+                                @*</a>*@
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+
+                                @Ajax.ActionLink(">>",
+                                              "Paginating/" + PageSize,
+                                             "Announcement",
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "ReplacePartial",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "OnBeginAjax",
+                                                 OnComplete = "OnCompleteAjax"
+                                             })
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                <span>&nbsp;</span>
+            }
+        </div>
+    </div>
+</div>

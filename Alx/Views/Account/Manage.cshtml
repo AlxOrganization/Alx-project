@@ -1,0 +1,39 @@
+﻿@model Alx.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<hgroup class="title">
+    <h3>@ViewBag.Title.</h3>
+    <h4>You're logged in as <strong>@User.Identity.Name</strong>.</h4>
+</hgroup>
+<div class="row">
+    <div class="col-md-6">
+        <section id="loginForm">
+            @*<h2>Use a local account to log in.</h2>*@
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            @if (ViewBag.HasLocalPassword)
+            {
+                @Html.Partial("_ChangePasswordPartial")
+            }
+            else
+            {
+                @Html.Partial("_SetPasswordPartial")
+            }
+
+            <section id="externalLogins">
+                @Html.Action("RemoveExternalLogins")
+
+                @*<h3>Add an external login</h3>
+                    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })*@
+            </section>
+        </section>
+    </div>
+</div>
+
+

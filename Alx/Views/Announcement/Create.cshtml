@@ -1,0 +1,479 @@
+﻿@model Alx.Models.Announcement
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    Alx.Models.Image imgs = new Alx.Models.Image();
+    Alx.Models.Address Address = new Alx.Models.Address();
+    Alx.Models.City City = new Alx.Models.City();
+
+}
+
+
+
+<h2></h2>
+
+
+@using (Html.BeginForm("Create", "Announcement", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Creare Anunt</legend>
+
+
+        <div class="row">
+            <div class="editor-label">
+                @*@Html.LabelFor(model => model.Title)*@
+                <label>Titlu</label>
+            </div>
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => model.Title, new { @class = "form-control" })*@
+                <input type="text" id="Title" name="Title" class="form-control" placeholder="Titlu anunt" required />
+                @Html.ValidationMessageFor(model => model.Title)
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                <label>Categorie</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control"
+                       data-toggle="modal" data-target="#myModalCategorieCreate"
+                       placeholder="Toate Categoriile" id="inputCategori" name="inputCategori"
+                       readonly style="cursor:default; background-color:white;">
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                @*@Html.LabelFor(model => model.Entrepeneur)*@
+                <label>Persoana fizica sau firma</label>
+            </div>
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => model.Entrepeneur)*@
+                @*<input type="text" id="Entrepeneur" name="Entrepeneur" class="form-control" required />*@
+                @Html.DropDownListFor(model => model.Entrepeneur, new SelectList(
+                          new List<Object>{
+                               new { value = "Fizica" , text = "Fizica"  },
+                               new { value = "Firma" , text = "Firma" }
+                            },
+                          "value",
+                          "text",
+                    2), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Entrepeneur)
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                @*@Html.LabelFor(model => model.Description)*@
+                <label>Descriere anunt</label>
+            </div>
+            <div class="col-md-6">
+                @*@Html.TextAreaFor(model => model.Description, new { @rows = "3", @cols = "30" })*@
+                <textarea class="form-control" rows="3" id="Description" name="Description" placeholder="Descriere anunt" required></textarea>
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                @*@Html.LabelFor(model => model.Price)*@
+                <label>Pret</label>
+            </div>
+            <div class="col-md-4">
+                @*@Html.EditorFor(model => model.Price)*@
+                <input type="text" id="Price" name="Price" class="form-control" placeholder="Pret" required />
+                @Html.ValidationMessageFor(model => model.Price)
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownListFor(model => model.Currency, new SelectList(
+                          new List<Object>{
+                               new { value = "0" , text = "Ron"  },
+                               new { value = "1" , text = "Euro" }
+                            },
+                          "value",
+                          "text",
+                    2), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Currency)
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                <label>Adresa</label>
+            </div>
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => Address.AddressName)*@
+                <input type="text" id="Address_AddressName" name="Address.AddressName" class="form-control" placeholder="Adresa" />
+                @Html.ValidationMessageFor(model => Address.AddressName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="editor-label">
+                @*<label>Oras</label>*@
+                @Html.LabelFor(model => City.CityName)
+            </div>
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => City.CityName)*@
+                <input type="text" id="City_CityName" name="City.CityName" class="form-control" placeholder="Oras" required />
+                @Html.ValidationMessageFor(model => City.CityName)
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+
+        <input name="Images" style="position:absolute; left:-2000px;" type="file" multiple id="image_upload" accept="image/*" class="form-control" />
+        <div class="row">
+            <div class="col-md-2">
+                <div class="cn" id="img1">
+                    <div class="inner" id="img11">
+                        <img src="~/Images/images.png" id="img111" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="cn" id="img2">
+                    <div class="inner" id="img22">
+                        <img src="~/Images/images.png" id="img222" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="cn" id="img3">
+                    <div class="inner" id="img33">
+                        <img src="~/Images/images.png" id="img333" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="cn" id="img4">
+                    <div class="inner" id="img44">
+                        <img src="~/Images/images.png" id="img444" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="cn" id="img5">
+                    <div class="inner" id="img55">
+                        <img src="~/Images/images.png" id="img555" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="cn" id="img6">
+                    <div class="inner" id="img66">
+                        <img src="~/Images/images.png" id="img666" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="cn" id="img7">
+                    <div class="inner" id="img77">
+                        <img src="~/Images/images.png" id="img777" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="cn" id="img8">
+                    <div class="inner" id="img88">
+                        <img src="~/Images/images.png" id="img888" style="width: 30px; height:30px; display:inherit; border-radius:5px;" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <input type="submit" class="btn btn-default" value="Creare" />
+            </div>
+        </div>
+
+        @*POP-UP categories*@
+        <div class="modal fade" id="myModalCategorieCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row" id="titleCategori">
+                            <div class="col-xs-4">
+                                <span id="BackCounty">
+                                    <i class="glyphicon glyphicon-chevron-left" id="ILog"
+                                       style="display:none;"></i> Categorii
+                                </span>
+                            </div>
+                            <div class="col-xs-8" style="text-align:end;"><span id="CategoryParent"><i class="glyphicon glyphicon-indent-left"></i> Toate Categoriile</span></div>
+                        </div>
+                        @*</h4>*@
+                    </div>
+                    <div class="modal-body text-center" id="BodyCategory">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+<script src="~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+<script src="~/Scripts/AutocompletType.js"></script>
+<link href="~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" />
+<script>
+    $(document).ready(function () {
+        var array = new Array();
+        var IdEvent;
+        var StringCategory = "";
+        //GetElementsCategory();
+
+        $('#image_upload').change(function () {
+
+            if (this.files.length > 1) {
+                for (var i = 0; i < this.files.length && i < 8; i++) { //for multiple files
+                    (function (file, index) {
+                        var IdElement;
+                        IdElement = "img" + (index + 1);
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var div = document.getElementById(IdElement);
+                            var img = document.createElement('img');
+                            img.src = reader.result;
+                            var childDiv = document.getElementById(IdElement + IdElement.substring(3, 4));
+                            img.style.width = "90px";
+                            img.style.height = "90px";
+                            img.style.borderRadius = "5px";
+                            div.removeChild(childDiv);
+                            div.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
+                    })(this.files[i], i);
+                }
+            }
+            else {
+                var IdElement;
+                //if ((IdEvent != undefined || IdEvent != null) && (index+1) == )
+                //    IdElement = IdEvent + (index + 1);
+
+                IdElement = "img1";
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // get file content
+                    var div = document.getElementById(IdElement);
+                    var img = document.createElement('img');
+                    img.src = reader.result;
+                    var childDiv = document.getElementById("img11");
+                    img.style.width = "90px";
+                    img.style.height = "90px";
+                    img.style.borderRadius = "5px";
+                    div.removeChild(childDiv);
+                    div.appendChild(img);
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        $('div.cn').click(function (event) {
+            //alert("am atins");
+            IdEvent = event.target.id;
+            IdEvent = IdEvent.substring(0, 4);
+
+            $("div.inner").remove();
+            $("div img").remove();
+
+            for (var i = 0 ; i < 8 ; i++) {
+                var div = document.createElement('div');
+                div.className = "inner";
+                div.id = "img" + (i + 1) + (i + 1);
+                var img = document.createElement('img');
+                img.style.width = "30px";
+                img.style.height = "30px";
+                img.id = 'img' + (i + 1) + (i + 1) + (i + 1);
+                img.src = "../Images/images.png";
+                img.style.display = "inherit";
+                img.style.borderRadius = "5px";
+                div.appendChild(img);
+                var Div = document.getElementById("img" + (i + 1));
+                Div.appendChild(div);
+            }
+
+            $('#image_upload').trigger('click');
+
+        });
+
+        $("#inputCategori").click(function () {
+            $.get("/Categorie/Categories/?name=0", function (data) {
+                var divBody = document.getElementById('BodyCategory');
+                divBody.innerHTML = "";
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var divRow = document.createElement('div');
+                        divRow.className = "row";
+                        divRow.style.width = "100%";
+                        //<div class="col-xs-6 col-sm-3"
+                        var divCell = document.createElement('div');
+                        divCell.className = "col-xs-12";
+                        //County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        divCell.innerHTML = data[i].Name;
+                        var attr = document.createAttribute('data-category');
+                        attr.value = data[i].Name;
+                        divCell.setAttributeNode(attr);
+                        //var attr1 = document.createAttribute('onclick');
+                        //attr1.value = "GetElementsCategory(this)";
+                        //divCell.setAttributeNode(attr1);
+                        // $('[data-category]').click(GetElementsCategory(this));
+
+
+                        if (data[i].Count > 0) {
+                            var span = document.createElement('span');
+                            span.className = "glyphicon glyphicon-chevron-right";
+                            divCell.insertBefore(span, divCell.childNodes[1]);
+                        }
+                        divRow.appendChild(divCell);
+                        divBody.insertBefore(divRow, divBody.childNodes[divBody.childNodes.length]);
+                    }
+
+                    $('[data-category]').click(function () {
+                        GetElementsCategory(this);
+                    });
+                }
+                else {
+                    $('#inputCategori').val($(element).data('category'));
+                    $("#inputCategori").trigger('click');
+                }
+            });
+
+            return;
+        });
+
+        $("#CategoryParent").click(function () {
+            //$('#inputCategori').val($("#CategoryParent").text());
+            //$("#inputCategori").trigger('click');
+            if (StringCategory != "") {
+                if (StringCategory != $("#CategoryParent").text()) {
+                    var Category = StringCategory.split('>');
+                    var ok20 = true;
+                    if (Category.length >= 1) {
+                        if (Category[Category.length - 1].trim() == $("#CategoryParent").text().trim()) {
+                            ok20 = false;
+                        }
+                    }
+                    if (ok20 == true)
+                        StringCategory = StringCategory + " > " + $("#CategoryParent").text();
+                }
+            }
+            else {
+                StringCategory = $("#CategoryParent").text();
+            }
+            $('#inputCategori').val(StringCategory);
+            StringCategory = "";
+            $("#inputCategori").trigger('click');
+            //$("#BodyCategory").text('');
+            //$("#BodyCategory")
+
+        });
+
+        function GetElementsCategory(element) {
+            //var Element;
+            //if (element == null || element == undefined)
+            //    Element = "0";
+            //else
+            //    Element = $(element).data('category');
+
+            var Element;
+            if (element == null || element == undefined)
+                Element = "0";
+            else {
+                Element = $(element).data('category');
+                if (StringCategory != "") {
+                    StringCategory = StringCategory + " > " + Element;
+                }
+                else {
+                    StringCategory = Element;
+                }
+            }
+
+            $.get("/Categorie/Categories/?name=" + Element, function (data) {
+                var divBody = document.getElementById('BodyCategory');
+                divBody.innerHTML = "";
+                while (divBody.firstChild) {
+                    divBody.removeChild(divBody.firstChild);
+                }
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var divRow = document.createElement('div');
+                        divRow.className = "row";
+                        divRow.style.width = "100%";
+                        //<div class="col-xs-6 col-sm-3"
+                        var divCell = document.createElement('div');
+                        divCell.className = "col-xs-12";
+                        //County[i].CountyName <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        divCell.innerHTML = data[i].Name;
+                        var attr = document.createAttribute('data-category');
+                        attr.value = data[i].Name;
+                        divCell.setAttributeNode(attr);
+                        //var attr1 = document.createAttribute('onclick');
+                        //attr1.value = "GetElementsCategory(this)";
+                        // $('[data-category]').click(GetElementsCategory(this));
+
+                        //divCell.setAttributeNode(attr1);
+                        if (data[i].Count > 0) {
+                            var span = document.createElement('span');
+                            span.className = "glyphicon glyphicon-chevron-right";
+                            divCell.insertBefore(span, divCell.childNodes[1]);
+                        }
+                        divRow.appendChild(divCell);
+                        divBody.insertBefore(divRow, divBody.childNodes[divBody.childNodes.length]);
+                    }
+                    $("#CategoryParent").text($(element).data('category'));
+                    $('[data-category]').click(function () {
+                        GetElementsCategory(this);
+                    });
+                }
+                else {
+                    //Modificat 17.02.2015
+                    //$('#MainCategory').text($(element).data('category'));
+                    /*if ($("#CategoryParent").text() != "")
+                        $('#MainCategory').text($("#CategoryParent").text() + " > " + $(element).data('category'));
+                    else
+                        $('#MainCategory').text($(element).data('category'));
+                        */
+                    if (StringCategory != "") {
+                        $('#inputCategori').val(StringCategory);
+                    }
+                    else {
+                        $('#inputCategori').val($(element).data('category'));
+                    }
+                    StringCategory = "";
+                    //End Modificare 17.02.2015
+                    $("#inputCategori").trigger('click');
+                }
+
+                return;
+
+            });
+        }
+
+    });
+
+</script>
+<div class="row">
+    &nbsp;
+</div>
+<div class="row">
+    &nbsp;
+</div>
+<div class="row">
+    @Html.ActionLink("Mergi la pagina principala", "Index", "Home")
+</div>
