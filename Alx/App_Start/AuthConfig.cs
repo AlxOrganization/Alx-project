@@ -30,7 +30,7 @@ namespace Alx
             //OAuthWebSecurity.RegisterGoogleClient();
             OAuthWebSecurity.RegisterClient(new GooglePlusClient("895297505523-tdungd05fb5m9mh3u4e7p0d2n9rvlepl.apps.googleusercontent.com",
                 "BkKwwdkJx_AsDfrrA5qQxW7C"), "google", null);
-            //Fixare bug
+            //Fixare bugsadasd
 
             
         }
